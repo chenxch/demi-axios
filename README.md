@@ -1,3 +1,10 @@
+<p align="center">
+  <br>
+  <img width="400" src="./logo.png" alt="logo of demi-axios repository">
+  <br>
+  <br>
+</p>
+
 # demi-axios
 [![NPM version](https://img.shields.io/npm/v/demi-axios?color=a1b858&label=)](https://www.npmjs.com/package/demi-axios)
 
