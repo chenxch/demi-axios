@@ -1,10 +1,4 @@
-import axios, {
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosRequestHeaders,
-  AxiosResponse,
-  ResponseType,
-} from 'axios'
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse, ResponseType } from 'axios'
 import qs from 'qs'
 import { ref, Ref } from 'vue-demi'
 import { downloadFile } from './utils'
@@ -21,11 +15,7 @@ type DemiAxiosRequestConfig<T> = AxiosRequestConfig & { formatter: Formatter<T> 
 
 type Formatter<T> = (responseData: any, currentData: T) => T
 
-type AdapterTask = <T>(
-  url: string,
-  initialData: T,
-  formatter?: Formatter<T>
-) => CompositionCollection<T>
+type AdapterTask = <T>(initialData: T, url: string, formatter?: Formatter<T>) => CompositionCollection<T>
 
 let service: AxiosInstance
 export const customHeaders: Record<string, any> = {}
@@ -33,9 +23,8 @@ export const customHeaderBlackMap: Record<string, string[]> = {}
 
 export function create(config: AxiosRequestConfig) {
   service = service != null ? service : axios.create(config)
-
-  service.interceptors.request.use((config) => {
-    Object.keys(customHeaders).forEach((key) => {
+  service.interceptors.request.use(config => {
+    Object.keys(customHeaders).forEach(key => {
       if (!(customHeaderBlackMap[key] ?? []).includes(config.url as string)) {
         ;(config.headers as AxiosRequestHeaders)[key] = customHeaders[key]
       }
@@ -60,7 +49,7 @@ function getPayloadConfig<T>(
 
     if (multipart) {
       const formData = new FormData()
-      Object.keys(payload).forEach((key) => formData.append(key, payload[key]))
+      Object.keys(payload).forEach(key => formData.append(key, payload[key]))
       payload = formData
     }
 
@@ -82,30 +71,24 @@ function createTask<T>(
   urlencoded = false,
   multipart = false
 ): CompositionCollection<T> {
-  const loading = ref(true)
+  const loading = ref<boolean>(true)
   const error = ref()
   const data = ref(initialData) as Ref<T>
   const response = ref()
 
-  const task = (
-    payload?: Record<string, any>,
-    config: AxiosRequestConfig = {}
-  ): Promise<AxiosResponse> => {
-    const taskConfig = Object.assign(
-      getPayloadConfig(preConfig, payload, type, urlencoded, multipart),
-      config
-    )
+  const task = (payload?: Record<string, any>, config: AxiosRequestConfig = {}): Promise<AxiosResponse> => {
+    const taskConfig = Object.assign(getPayloadConfig(preConfig, payload, type, urlencoded, multipart), config)
 
     return service
       .request(taskConfig)
-      .then((res) => {
+      .then(res => {
         response.value = res
         data.value = taskConfig.formatter(res.data.data, data.value)
         loading.value = false
 
         return res
       })
-      .catch((err) => {
+      .catch(err => {
         error.value = err
         loading.value = false
 
@@ -127,7 +110,7 @@ const createFetchMethod = (
   method: 'get' | 'head' | 'delete' | 'options',
   responseType: ResponseType = 'json'
 ): AdapterTask => {
-  return <T>(url: string, initialData: T, formatter: Formatter<T> = (v) => v) => {
+  return <T>(initialData: T, url: string, formatter: Formatter<T> = v => v) => {
     const config = {
       url,
       responseType,
@@ -139,12 +122,8 @@ const createFetchMethod = (
   }
 }
 
-const createModifyMethod = (
-  method: 'post' | 'put' | 'patch',
-  urlencoded = false,
-  multipart = false
-): AdapterTask => {
-  return <T>(url: string, initialData: T, formatter: Formatter<T> = (v) => v) => {
+const createModifyMethod = (method: 'post' | 'put' | 'patch', urlencoded = false, multipart = false): AdapterTask => {
+  return <T>(initialData: T, url: string, formatter: Formatter<T> = v => v) => {
     const getHeaders = () => {
       if (multipart) return { 'Content-Type': 'multipart/form-data' }
       if (urlencoded) return { 'Content-Type': 'application/x-www-form-urlencoded' }
@@ -172,13 +151,13 @@ export const useHeadBlob = createFetchMethod('head', 'blob')
 export const useDeleteBlob = createFetchMethod('delete', 'blob')
 export const useOptionsBlob = createFetchMethod('options', 'blob')
 
-export const usePost = createModifyMethod('post', true)
-export const usePut = createModifyMethod('put', true)
-export const usePatch = createModifyMethod('patch', true)
+export const usePost = createModifyMethod('post')
+export const usePut = createModifyMethod('put')
+export const usePatch = createModifyMethod('patch')
 
-export const usePostJSON = createModifyMethod('post')
-export const usePutJSON = createModifyMethod('put')
-export const usePatchJSON = createModifyMethod('patch')
+export const usePostEncoded = createModifyMethod('post', true)
+export const usePutEncoded = createModifyMethod('put', true)
+export const usePatchEncoded = createModifyMethod('patch', true)
 
 export const usePostMultipart = createModifyMethod('post', false, true)
 export const usePutMultipart = createModifyMethod('put', false, true)

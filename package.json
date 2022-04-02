@@ -1,6 +1,6 @@
 {
   "name": "demi-axios",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Based on vue-demi, useAxios written by compositionApi supports vue2/vue3.",
   "main": "dist/index.js",
   "scripts": {
