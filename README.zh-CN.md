@@ -6,15 +6,15 @@
 </p>
 
 <p align='center'>
-<b>English</b> | <a href="https://github.com/chenxch/demi-axios/blob/main/README.zh-CN.md">简体中文</a>
+<a href="https://github.com/chenxch/demi-axios/blob/main/README.md">English</a> | <b>简体中文</b>
 </p>
 
 # demi-axios
 [![NPM version](https://img.shields.io/npm/v/demi-axios?color=a1b858&label=)](https://www.npmjs.com/package/demi-axios)
 
-- 🦾 Based on vue-demi, useAxios written by compositionApi supports vue2/vue3.
+- 🦾 基于vue-demi开发的兼容vue2/vue3使用的useAxios组合式API。
 
-## Installation
+## 安装
 
 ```bash
 # npm
@@ -26,8 +26,8 @@ yarn add demi-axios
 # pnpm
 pnpm i demi-axios
 ```
-## Usage Example
-### init
+## 使用样例
+### 初始化
 ```ts
 // init 
 import { create } from 'demi-axios'
@@ -42,7 +42,7 @@ const axios: AxiosInstance = create({/* axiosOptions */})
 //   return Promise.reject(error)
 // })
 ```
-### Usage
+### 使用
 ```ts
 // Usage
 // use***(initialData, url, Formatter(responseData, currentData))
@@ -106,9 +106,9 @@ usePatchMultipart
 
 FAQ
 <details>
-<summary>1. data.value is undefined</summary><br>
+<summary>1. data.value 为 undefined</summary><br>
 
-The default data format returned by the server is {data:any}. If you are {}, you can do a layer of data processing in the interceptor.
+服务器返回的默认数据格式为 {data:any}。 如果你是{}，你可以在拦截器中做一层数据处理。
 
 ```ts
 axios.interceptors.response.use((response) => {
