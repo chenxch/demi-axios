@@ -1,6 +1,6 @@
 <p align="center">
   <br>
-  <img width="400" src="./logo.png" alt="logo of demi-axios repository">
+  <img width="400" src="https://raw.githubusercontent.com/chenxch/pic-image/master/20220404/demixaxios.3ltif7eee300.webp" alt="logo of demi-axios repository">
   <br>
   <br>
 </p>
